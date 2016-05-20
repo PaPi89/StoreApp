@@ -20,6 +20,21 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>com.codechallange</groupId>
+    	<artifactId>store-controller</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+        <dependency>
+    	<groupId>com.codechallange</groupId>
+    	<artifactId>store-service</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+        <dependency>
+    	<groupId>com.codechallange</groupId>
+    	<artifactId>store-dao</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>store-app</finalName>

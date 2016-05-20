@@ -6,10 +6,22 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>StoreApp</description>
+  <!-- <url>https://github.com/PaPi89/StoreApp/pom.xml</url -->
   <modules>
   	<module>store-controller</module>
   	<module>store-service</module>
   	<module>store-dao</module>
     <module>store-app</module>
   </modules>
+  <properties>
+  	<spring.version>3.0.5.RELEASE</spring.version>
+  	<project.version>0.0.1-SNAPSHOT</project.version>
+  </properties>
+  <dependencies>
+    <dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-core</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  </dependencies>
 </project>
