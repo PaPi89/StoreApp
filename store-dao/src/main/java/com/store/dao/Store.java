@@ -1,4 +1,4 @@
-package com.store.dto;
+package com.store.dao;
 
 /* Store Object to store the data in DB.
  * 
@@ -9,6 +9,7 @@ public class Store {
 	private int storeId;
 	private String storeName, storeOwner;
 	private long storeDistance;
+	private Contact contact;
 	public int getStoreId() {
 		return storeId;
 	}
@@ -33,11 +34,17 @@ public class Store {
 	public void setStoreDistance(long storeDistance) {
 		this.storeDistance = storeDistance;
 	}
-	
+	public Contact getContact() {
+		return contact;
+	}
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
 		result = prime * result
 				+ (int) (storeDistance ^ (storeDistance >>> 32));
 		result = prime * result + storeId;
@@ -47,7 +54,6 @@ public class Store {
 				+ ((storeOwner == null) ? 0 : storeOwner.hashCode());
 		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -57,6 +63,11 @@ public class Store {
 		if (getClass() != obj.getClass())
 			return false;
 		Store other = (Store) obj;
+		if (contact == null) {
+			if (other.contact != null)
+				return false;
+		} else if (!contact.equals(other.contact))
+			return false;
 		if (storeDistance != other.storeDistance)
 			return false;
 		if (storeId != other.storeId)
@@ -73,12 +84,11 @@ public class Store {
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		return "Store [storeId=" + storeId + ", storeName=" + storeName
 				+ ", storeOwner=" + storeOwner + ", storeDistance="
-				+ storeDistance + "]";
+				+ storeDistance + ", contact=" + contact + "]";
 	}
 	
 }

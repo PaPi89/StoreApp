@@ -25,8 +25,7 @@ public class StoreController {
 	@RequestMapping(value="/getStore", method=RequestMethod.GET)
 	public @ResponseBody Store getStore(@RequestParam("id") int storeId) throws StoreException{
 		logger.info("Inside Get Store Controller");
-		throw new StoreException();
-		//return storeService.getStore(storeId);
+		return storeService.getStore(storeId);
 	}
 	
 	@RequestMapping(value="/createStore", method=RequestMethod.PUT)

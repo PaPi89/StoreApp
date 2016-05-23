@@ -2,7 +2,7 @@ package com.store.interfaces;
 
 import java.util.List;
 
-import com.store.dto.Store;
+import com.store.dao.Store;
 
 public interface IStoreService {
 

@@ -14,4 +14,22 @@
 	 
 	<mvc:annotation-driven />
 	
+	<bean id="storeDAO" class="com.store.dao.impls.StoreDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="datasourceProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+		<property name="location" value="WEB-INF\jdbc.properties" />
+
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${datasource.driver}" />
+        <property name="url" value="${datasource.url}" />
+        <property name="username" value="${datasource.user}" />
+        <property name="password" value="${datasource.password}" />
+    </bean>
+	
 </beans>

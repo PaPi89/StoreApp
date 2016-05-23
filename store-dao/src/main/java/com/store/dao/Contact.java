@@ -1,4 +1,4 @@
-package com.store.dto;
+package com.store.dao;
 
 /* Contact Object to store in DB.
  * 
