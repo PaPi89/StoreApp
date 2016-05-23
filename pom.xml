@@ -12,10 +12,12 @@
   	<module>store-service</module>
   	<module>store-dao</module>
     <module>store-app</module>
+    <module>store-utils</module>	
   </modules>
   <properties>
   	<spring.version>3.0.5.RELEASE</spring.version>
   	<project.version>0.0.1-SNAPSHOT</project.version>
+	<log4j.version>1.2.17</log4j.version>
   </properties>
   <dependencies>
     <dependency>
@@ -23,5 +25,15 @@
   		<artifactId>spring-core</artifactId>
   		<version>${spring.version}</version>
   	</dependency>
+  	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>	
   </dependencies>
 </project>

@@ -8,4 +8,4 @@ Test App
 * Update a Store
  
 * Delete a Store
-s
+
