@@ -5,32 +5,20 @@ package com.store.dao;
  */
 public class Contact {
 
-	private int contactId, zipcode, storeId;
-	private int contactNumber;
-	private String addressLine1, addressLine2, city, state, country;
+	private int contactId, storeId;
+	private String addressLine1, addressLine2, city, state;
+	private int zipcode;
 	public int getContactId() {
 		return contactId;
 	}
 	public void setContactId(int contactId) {
 		this.contactId = contactId;
 	}
-	public int getZipcode() {
-		return zipcode;
-	}
-	public void setZipcode(int zipcode) {
-		this.zipcode = zipcode;
-	}
 	public int getStoreId() {
 		return storeId;
 	}
 	public void setStoreId(int storeId) {
 		this.storeId = storeId;
-	}
-	public int getContactNumber() {
-		return contactNumber;
-	}
-	public void setContactNumber(int contactNumber) {
-		this.contactNumber = contactNumber;
 	}
 	public String getAddressLine1() {
 		return addressLine1;
@@ -56,13 +44,12 @@ public class Contact {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public String getCountry() {
-		return country;
+	public int getZipcode() {
+		return zipcode;
 	}
-	public void setCountry(String country) {
-		this.country = country;
+	public void setZipcode(int zipcode) {
+		this.zipcode = zipcode;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -73,14 +60,10 @@ public class Contact {
 				+ ((addressLine2 == null) ? 0 : addressLine2.hashCode());
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + contactId;
-		result = prime * result + contactNumber;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + storeId;
-		result = prime * result + zipcode;
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -107,13 +90,6 @@ public class Contact {
 			return false;
 		if (contactId != other.contactId)
 			return false;
-		if (contactNumber != other.contactNumber)
-			return false;
-		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
@@ -121,18 +97,13 @@ public class Contact {
 			return false;
 		if (storeId != other.storeId)
 			return false;
-		if (zipcode != other.zipcode)
-			return false;
 		return true;
 	}
-	
 	@Override
 	public String toString() {
-		return "Contact [contactId=" + contactId + ", zipcode=" + zipcode
-				+ ", storeId=" + storeId + ", contactNumber=" + contactNumber
+		return "Contact [contactId=" + contactId + ", storeId=" + storeId
 				+ ", addressLine1=" + addressLine1 + ", addressLine2="
-				+ addressLine2 + ", city=" + city + ", state=" + state
-				+ ", country=" + country + "]";
+				+ addressLine2 + ", city=" + city + ", state=" + state + "]";
 	}
 	
 }

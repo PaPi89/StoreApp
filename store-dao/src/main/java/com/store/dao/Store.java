@@ -8,8 +8,8 @@ public class Store {
 
 	private int storeId;
 	private String storeName, storeOwner;
-	private long storeDistance;
 	private Contact contact;
+	private double storeDistance;
 	public int getStoreId() {
 		return storeId;
 	}
@@ -28,25 +28,23 @@ public class Store {
 	public void setStoreOwner(String storeOwner) {
 		this.storeOwner = storeOwner;
 	}
-	public long getStoreDistance() {
-		return storeDistance;
-	}
-	public void setStoreDistance(long storeDistance) {
-		this.storeDistance = storeDistance;
-	}
 	public Contact getContact() {
 		return contact;
 	}
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
+	public double getStoreDistance() {
+		return storeDistance;
+	}
+	public void setStoreDistance(double storeDistance) {
+		this.storeDistance = storeDistance;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
-		result = prime * result
-				+ (int) (storeDistance ^ (storeDistance >>> 32));
 		result = prime * result + storeId;
 		result = prime * result
 				+ ((storeName == null) ? 0 : storeName.hashCode());
@@ -68,8 +66,6 @@ public class Store {
 				return false;
 		} else if (!contact.equals(other.contact))
 			return false;
-		if (storeDistance != other.storeDistance)
-			return false;
 		if (storeId != other.storeId)
 			return false;
 		if (storeName == null) {
@@ -87,8 +83,7 @@ public class Store {
 	@Override
 	public String toString() {
 		return "Store [storeId=" + storeId + ", storeName=" + storeName
-				+ ", storeOwner=" + storeOwner + ", storeDistance="
-				+ storeDistance + ", contact=" + contact + "]";
+				+ ", storeOwner=" + storeOwner + ", contact=" + contact + "]";
 	}
-	
+
 }

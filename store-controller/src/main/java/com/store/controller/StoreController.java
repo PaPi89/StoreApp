@@ -1,5 +1,7 @@
 package com.store.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriUtils;
 
-import com.store.dto.Store;
+import sun.awt.CharsetString;
+
+import com.store.dao.Store;
 import com.store.exceptions.StoreException;
 import com.store.interfaces.IStoreService;
 
@@ -44,9 +49,13 @@ public class StoreController {
 		logger.info("Inside Delete Store Controller");
 	}
 	
-	@RequestMapping(value="/findStores", method=RequestMethod.GET)
-	public @ResponseBody List<Store>  findStores(){
+	@RequestMapping(value = "/findStores", method = RequestMethod.GET)
+	public @ResponseBody List<Store> findStores(
+			@RequestParam("storeName") String storeName,
+			@RequestParam("zipcode") int zipcode,
+			@RequestParam("miles") double xMiles) {
 		logger.info("Inside find Stores Controller");
-		return null;
+		List<Store> stores = storeService.findStore(storeName, xMiles, zipcode);
+		return stores;
 	}
 }

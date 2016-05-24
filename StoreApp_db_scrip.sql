@@ -1,4 +1,4 @@
-create table store(storeId int AUTO_INCREMENT PRIMARY KEY, storeName varchar(60), storeOwner varchar(60), storeDistance int);
+create table store(storeId int AUTO_INCREMENT PRIMARY KEY, storeName varchar(60), storeOwner varchar(60), storeDistance double);
 
 create table contact(contactId int AUTO_INCREMENT PRIMARY KEY, addressLine1 varchar(40), addressLine2 varchar(40), city varchar(25), state varchar(25), zipcode int, storeId int, CONSTRAINT FOREIGN KEY(storeId) REFERENCES store(storeId));
 
