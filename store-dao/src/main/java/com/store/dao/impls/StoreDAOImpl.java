@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -28,6 +30,10 @@ public class StoreDAOImpl implements IStoreDAO {
 	private static final String INSERT_INTO_CONTACT_ONLY_MANDATORY = "INSERT into contact (addressLine1, city, state, zipcode, storeId) values (?,?,?,?,?)";
 	private static final String INSERT_INTO_CONTACT_FULL = "INSERT into contact (addressLine1, addressLine2, city, state, zipcode, storeId) values (?, ?,?,?,?,?)";
 	
+	private static final String UPDATE_STORE_INFO = "UPDATE store SET";
+	private static final String UPDATE_STORE_CONTACT_INFO = "UPDATE contact SET";
+	
+	private static final String SELECT_FROM_STORE_BY_ID = "Select s.storeName, s.storeOwner, c.addressLine1, c.city, c.state, c.zipcode FROM store s, contact c WHERE s.storeId = ? AND c.storeId = ?";
 	private static final String SELECT_FROM_ZIPCODES = "SELECT city,state FROM usa_zipcode WHERE zipcode=?";
 	private static final String SELECT_FROM_STORE = "SELECT storeName, StoreOwner FROM store s, contact c WHERE s.storeId = c.storeId AND s.storeName=? AND c.zipcode=? AND s.storeDistance<?";
 	private DataSource dataSource;
@@ -88,8 +94,8 @@ public class StoreDAOImpl implements IStoreDAO {
 				stmt.executeUpdate();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("ERROR: " + e.getMessage());
+			logger.error("ERROR: " + e);
+			throw e;
 		} finally {
 			stmt.close();
 			conn.close();
@@ -97,18 +103,67 @@ public class StoreDAOImpl implements IStoreDAO {
 		return storeId;
 	}
 
-	public Store getStoreById(int storeId) {
+	public Store getStoreById(int storeId) throws SQLException {
 		logger.info("Inside GET BY ID DAO function");
-		return null;
+		Store store = new Store();
+		Contact contact = new Contact();
+		store.setContact(contact);
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = dataSource.getConnection();
+			stmt = conn.prepareStatement(SELECT_FROM_STORE_BY_ID);
+			stmt.setInt(1, storeId);
+			stmt.setInt(2, storeId);
+			
+			ResultSet resultSet = stmt.executeQuery();
+			while(resultSet.next()){
+				store.setStoreName(resultSet.getString("storeName"));
+				store.setStoreOwner(resultSet.getString("storeOwner"));
+				store.getContact().setAddressLine1(resultSet.getString("addressLine1"));
+				store.getContact().setCity(resultSet.getString("city"));
+				store.getContact().setState(resultSet.getString("state"));
+				store.getContact().setZipcode(resultSet.getInt("zipcode"));
+			}
+		} catch(SQLException e){
+			logger.error("ERROR: " + e);
+			throw e;
+		} finally {
+			stmt.close();
+			conn.close();
+		}
+		return store;
 	}
 
-	public void update() {
-		// TODO Auto-generated method stub
+	public void update(Store store)  throws SQLException {
+		logger.info("Inside UPDATE STORE function");
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		String query = null;
+		try {
+			conn = dataSource.getConnection();
+			query = buildStoreUpdateQuery(store);
+			stmt = conn.prepareStatement(query);
+			
+			int result = stmt.executeUpdate();
+			query = null;
+			stmt.close();
+			if(store.getContact() != null){
+				store.getContact().setStoreId(store.getStoreId());
+				query = buildContactUpdateQuery(store.getContact());
+				stmt = conn.prepareStatement(query);
+				
+				result = stmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			logger.error("ERROR: " + e);
+			throw e;
+		}
+	}
+
+	public void delete(int storeId)  throws SQLException {
+		logger.info("Inside DELETE STORE function");
 		
-	}
-
-	public void delete() {
-		// TODO Auto-generated method stub
 		
 	}
 	public String getPostAddress(int zipcode) throws SQLException {
@@ -129,8 +184,8 @@ public class StoreDAOImpl implements IStoreDAO {
 			resultSet.close();
 			zipCodesUSA.setZipcode(zipcode);
 		} catch(SQLException e){
-			e.printStackTrace();
-			logger.error("ERROR: " + e.getMessage());
+			logger.error("ERROR: " + e);
+			throw e;
 		} finally {
 			stmt.close();
 			conn.close();
@@ -161,8 +216,8 @@ public class StoreDAOImpl implements IStoreDAO {
 				stores.add(store);
 			}
 		} catch(SQLException e){
-			e.printStackTrace();
-			logger.error("ERROR: " + e.getMessage());
+			logger.error("ERROR: " + e);
+			throw e;
 		} finally {
 			stmt.close();
 			conn.close();
@@ -170,4 +225,49 @@ public class StoreDAOImpl implements IStoreDAO {
 		return stores;
 	}
 
+	private String buildStoreUpdateQuery(Store store){
+		StringBuilder storeQuery = new StringBuilder(UPDATE_STORE_INFO);
+		if ((store.getStoreName() != null) && (store.getStoreOwner() != null)) {
+			storeQuery.append(" storeName='" + store.getStoreName()
+					+ "', storeOwner='" + store.getStoreOwner() + "'");
+		} else if (store.getStoreName() != null) {
+			storeQuery.append(" storeName='" + store.getStoreName() + "'");
+		} else {
+			storeQuery.append(" storeOwner='" + store.getStoreOwner()  + "'");
+		}
+		storeQuery.append(" WHERE storeId=" + store.getStoreId());
+		return storeQuery.toString();
+	}
+	
+	private String buildContactUpdateQuery(Contact contact){
+		StringBuilder contactQuery = new StringBuilder(UPDATE_STORE_CONTACT_INFO);
+		Map<String,String> params = new HashMap<String, String>();
+		if(contact.getAddressLine1() != null){
+			params.put("addressLine1", contact.getAddressLine1());
+		}
+		if(contact.getAddressLine2() != null){
+			params.put("addressLine2", contact.getAddressLine2());
+		}
+		if(contact.getCity() != null){
+			params.put("city", contact.getCity());
+		}
+		if(contact.getState() != null){
+			params.put("state", contact.getState());
+		}
+		if(contact.getZipcode() > 0){
+			params.put("zipcode", ""+contact.getZipcode());
+		}
+		if(params.size() > 1){
+			for(String key : params.keySet()){
+				contactQuery.append(" " + key + "='" + params.get(key) + ",");
+			}
+			contactQuery.replace(contactQuery.lastIndexOf(","), contactQuery.lastIndexOf(","), "");
+		} else {
+			for(String key : params.keySet()){
+				contactQuery.append(" " + key + "='" + params.get(key));
+			}
+		}
+		contactQuery.append(" WHERE storeId=" + contact.getStoreId());
+		return contactQuery.toString();
+	}
 }
