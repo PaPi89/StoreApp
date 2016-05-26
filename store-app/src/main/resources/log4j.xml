@@ -2,10 +2,10 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration debug="true"
 	xmlns:log4j='http://jakarta.apache.org/log4j/'>
-
+    <!-- for StoreApp REST Interface log appender -->
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">
 	   <param name="append" value="false" />
-	   <param name="maxFileSize" value="10KB" />
+	   <param name="maxFileSize" value="2MB" />
 	   <param name="maxBackupIndex" value="5" />
 	   <!-- For Tomcat -->
 	   <param name="file" value="${catalina.home}/webapps/store-app/logs/store-app.log" />
@@ -15,7 +15,20 @@
 	   </layout>
 	</appender>
 
-	<logger name="com.store">
+	<!-- for StoreApp config category -->
+	<logger name="com.store.controller">
+		<level value="info" />		
+	</logger>
+	
+	<logger name="com.store.service">
+		<level value="info" />		
+	</logger>
+	
+	<logger name="com.store.dao">
+		<level value="info" />		
+	</logger>
+	
+	<logger name="com.store.utils">
 		<level value="info" />		
 	</logger>
 	

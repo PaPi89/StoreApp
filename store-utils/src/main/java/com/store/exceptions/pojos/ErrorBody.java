@@ -1,9 +1,15 @@
 package com.store.exceptions.pojos;
 
+/**
+ * POJO which will be thrown to end client when any error occurred.
+ * 
+ * @author parth_pithadiya
+ *
+ */
 public class ErrorBody {
 
 	private String code, message, requestParams;
-	
+
 	public String getCode() {
 		return code;
 	}
@@ -27,5 +33,5 @@ public class ErrorBody {
 	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
 	}
-	
+
 }

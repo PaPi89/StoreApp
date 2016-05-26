@@ -1,5 +1,10 @@
 package com.store.exceptions.codes;
 
+/**
+ * Customised Error Codes
+ * @author parth_pithadiya
+ *
+ */
 public enum ErrorCodes {
 
 	BAD_REQUEST,

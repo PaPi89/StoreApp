@@ -22,23 +22,38 @@ import com.store.exceptions.StoreException;
 import com.store.exceptions.StoreNotFoundException;
 import com.store.interfaces.IStoreService;
 
+/**
+ * This class has functions to apply business logic.
+ * @author parth_pithadiya
+ *
+ */
 @Service
 public class StoreService implements IStoreService {
 
 	@Autowired
 	IStoreDAO storeDAO;
+	/***** BASE URL for GOOGLE's Distance Matrix API *****/
 	private static final String baseURL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
-	private static final String API_KEY = "AIzaSyAUHE4VDaX-vw15IUpVxhVRAWPqj45M5a0";
+	/*****
+	 * API_KEY is required to use GOOGLE's Distance Matrix API. This key must be
+	 * generated to find the distance between source and destination.
+	 * As of now, it is kept as blank. How to generate the key is provided in README.md file.
+	 *****/
+	private static final String API_KEY = "";
 	
 	private static final Logger logger = Logger.getLogger(StoreService.class);
-	public Store getStore(int storeId) throws InvalidSQLException, StoreNotFoundException {
+	
+	/***** To get the store details *****/
+	public Store getStore(int storeId) throws InvalidSQLException,
+			StoreNotFoundException {
 		logger.info("Inside Get Store Service");
 		Store store;
 		try {
 			store = storeDAO.getStoreById(storeId);
 			store.setStoreId(storeId);
-			if(store.getStoreName() == null){
-				throw new StoreNotFoundException("The given store is not present.");
+			if (store.getStoreName() == null) {
+				throw new StoreNotFoundException(
+						"The given store is not present.");
 			}
 		} catch (SQLException e) {
 			throw new InvalidSQLException(e.getMessage());
@@ -49,7 +64,9 @@ public class StoreService implements IStoreService {
 		return store;
 	}
 
-	public int createStore(Store store) throws InvalidRequestException, InvalidSQLException, StoreException {
+	/***** To save the store details *****/
+	public int createStore(Store store) throws InvalidRequestException,
+			InvalidSQLException, StoreException {
 		logger.info("Inside Create Store Service");
 		int storeId = 0;
 		double storeDistance = 0l;
@@ -71,15 +88,20 @@ public class StoreService implements IStoreService {
 		return storeId;
 	}
 
-	public void updateStore(Store store) throws InvalidSQLException {
+	/***** To update the store details *****/
+	public void updateStore(Store store) throws InvalidSQLException,
+			StoreNotFoundException {
 		logger.info("Inside Update Store Service");
 		try {
 			storeDAO.update(store);
 		} catch (SQLException e) {
 			throw new InvalidSQLException(e.getMessage());
+		} catch (StoreNotFoundException e) {
+			throw e;
 		}
 	}
 
+	/***** To delete the store details *****/
 	public void deleteStore(int storeId) throws InvalidSQLException {
 		logger.info("Inside Delete Store Service");
 		try {
@@ -89,12 +111,15 @@ public class StoreService implements IStoreService {
 		}
 	}
 	
-	public List<Store> findStore(String storeName, double xMiles, int zipcode) throws InvalidSQLException, StoreNotFoundException{
+	/***** To find the store details *****/
+	public List<Store> findStore(String storeName, double xMiles, int zipcode)
+			throws InvalidSQLException, StoreNotFoundException {
 		List<Store> stores = null;
 		try {
 			stores = storeDAO.getStoreWithinXMiles(storeName, xMiles, zipcode);
-			if(stores.get(0).getStoreName() == null){
-				throw new StoreNotFoundException("The given store is not present.");
+			if (stores.get(0).getStoreName() == null) {
+				throw new StoreNotFoundException(
+						"The given store is not present.");
 			}
 		} catch (SQLException e) {
 			throw new InvalidSQLException(e.getMessage());
@@ -102,7 +127,8 @@ public class StoreService implements IStoreService {
 		return stores;
 	}
 
-	private boolean validate(Store store) throws InvalidRequestException{
+	/***** Utility function to validate the store details *****/
+	private boolean validate(Store store) throws InvalidRequestException {
 		boolean valid = false;
 		if ((store.getStoreName() != null)
 				&& (store.getContact().getAddressLine1() != null)
@@ -111,13 +137,18 @@ public class StoreService implements IStoreService {
 				&& (store.getContact().getZipcode() > 0)) {
 			valid = true;
 		}
-		if(!valid){
+		if (!valid) {
 			throw new InvalidRequestException("Missing Mandatory Parameters");
 		}
 		return valid;
 	}
 	
-	private double calculateDistance(Store store) throws InvalidSQLException, StoreException {
+	/*****
+	 * Utility function to calculate the store distance from a post office of
+	 * specified USA zipcode
+	 *****/
+	private double calculateDistance(Store store) throws InvalidSQLException,
+			StoreException {
 		String origin = new String(store.getContact().getAddressLine1() + ","
 				+ store.getContact().getCity() + ","
 				+ store.getContact().getState());
@@ -131,11 +162,13 @@ public class StoreService implements IStoreService {
 		JSONArray rows = null, elements = null;
 		double calculatedDistance = 0.0;
 		try {
+			// get the post office address of a given USA zipcode.
 			destination = storeDAO.getPostAddress(store.getContact()
 					.getZipcode());
 
 			destination = destination.replace(' ', '+');
 			StringBuilder finalURL = new StringBuilder();
+			// generate the final URL to call the GOOGLE's Distance Matrix API.
 			finalURL.append(baseURL);
 			finalURL.append("origins=" + origin);
 			finalURL.append("&destinations=" + destination);
@@ -151,6 +184,7 @@ public class StoreService implements IStoreService {
 			while ((line = reader.readLine()) != null) {
 				outputString += line;
 			}
+			//provides the jSON object
 			jsonObject = new JSONObject(outputString);
 			rows = jsonObject.getJSONArray("rows");
 			rowObject = null;
@@ -162,6 +196,8 @@ public class StoreService implements IStoreService {
 			for (int i = 0; i < elements.length(); i++) {
 				elementObject = elements.getJSONObject(i);
 			}
+			// get the distance of a store from a given zipcode in meters and
+			// then convert it into miles.
 			calculatedDistance = (elementObject.getJSONObject("distance")
 					.getDouble("value") * 0.000621371);
 		} catch (SQLException e) {

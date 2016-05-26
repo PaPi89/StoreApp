@@ -18,6 +18,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<!-- Loading jdbc.properties file -->
 	<bean id="datasourceProperties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 
@@ -25,9 +26,11 @@
 
 	</bean>
 	
+	<!-- To accept and to provide jSON response -->
 	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
     </bean>
 	
+	<!-- Configure to accept requst as jSON and to send response as jSON -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
@@ -36,6 +39,7 @@
         </property>
     </bean>
 	
+	<!-- Configure DataSource Object -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${datasource.driver}" />
         <property name="url" value="${datasource.url}" />

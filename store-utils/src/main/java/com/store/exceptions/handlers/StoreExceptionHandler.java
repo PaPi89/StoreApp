@@ -27,19 +27,21 @@ import com.store.exceptions.pojos.ErrorBody;
 @ControllerAdvice
 public class StoreExceptionHandler extends ResponseEntityExceptionHandler {
 
+	/***** Handler for generic error *****/
 	@ExceptionHandler(StoreException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public @ResponseBody ErrorBody handleStoreException(
 			HttpServletRequest request, Exception ex) {
 		ErrorBody response = new ErrorBody();
-	    response.setCode(ErrorCodes.BAD_REQUEST.name());
-	    response.setMessage(ex.getMessage());
-	    StringBuilder requestParams = new StringBuilder();
-	    
-	    response.setRequestParams(requestParams.toString());
-	    return response;
+		response.setCode(ErrorCodes.BAD_REQUEST.name());
+		response.setMessage(ex.getMessage());
+		StringBuilder requestParams = new StringBuilder();
+
+		response.setRequestParams(requestParams.toString());
+		return response;
 	}
 	
+	/***** Handler for invalid request error *****/
 	@ExceptionHandler(InvalidRequestException.class)
 	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 	public @ResponseBody ErrorBody handleInvalidRequestException(
@@ -52,6 +54,7 @@ public class StoreExceptionHandler extends ResponseEntityExceptionHandler {
 	    return response;
 	}
 	
+	/***** Handler for SQL error *****/
 	@ExceptionHandler(InvalidSQLException.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody ErrorBody handleInvalidSQLException(
@@ -64,6 +67,7 @@ public class StoreExceptionHandler extends ResponseEntityExceptionHandler {
 	    return response;
 	}
 	
+	/***** Handler for Store Not Found error *****/
 	@ExceptionHandler(StoreNotFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody ErrorBody handleStoreNotFoundException(

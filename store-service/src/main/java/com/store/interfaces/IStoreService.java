@@ -16,7 +16,7 @@ public interface IStoreService {
 	public int createStore(Store store) throws InvalidRequestException,
 			InvalidSQLException, StoreException;
 
-	public void updateStore(Store store) throws InvalidSQLException;
+	public void updateStore(Store store) throws InvalidSQLException, StoreNotFoundException;
 
 	public void deleteStore(int storeId) throws InvalidSQLException;
 

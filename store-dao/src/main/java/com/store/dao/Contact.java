@@ -1,7 +1,9 @@
 package com.store.dao;
 
-/* Contact Object to store in DB.
- * 
+/**
+ * Reflects the contact table from DB.
+ * @author parth_pithadiya
+ *
  */
 public class Contact {
 

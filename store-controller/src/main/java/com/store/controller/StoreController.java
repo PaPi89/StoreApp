@@ -19,6 +19,12 @@ import com.store.exceptions.StoreException;
 import com.store.exceptions.StoreNotFoundException;
 import com.store.interfaces.IStoreService;
 
+/**
+ * This is REST controller class.
+ * It accepts all requests for StoreApp.
+ * @author parth_pithadiya
+ *
+ */
 @Controller
 @RequestMapping("/store")
 public class StoreController {
@@ -26,8 +32,16 @@ public class StoreController {
 	private static final Logger logger = Logger.getLogger(StoreController.class);
 	@Autowired
 	IStoreService storeService;
-	@RequestMapping(value="/getStore/{id}", method=RequestMethod.GET)
-	public @ResponseBody Store getStore(@PathVariable("id") int storeId) throws InvalidSQLException, StoreNotFoundException{
+	
+	/**
+	 * @PathVariable id - storeId which is stored in backend.
+	 * @return Store - if success, returns the store object which will be
+	 *         returned as jSON object.
+	 */
+	/***** REST API to get the store details. *****/
+	@RequestMapping(value = "/getStore/{id}", method = RequestMethod.GET)
+	public @ResponseBody Store getStore(@PathVariable("id") int storeId)
+			throws InvalidSQLException, StoreNotFoundException {
 		logger.info("Inside Get Store Controller");
 		try {
 			return storeService.getStore(storeId);
@@ -38,8 +52,16 @@ public class StoreController {
 		}
 	}
 	
-	@RequestMapping(value="/createStore", method=RequestMethod.PUT)
-	public @ResponseBody int createStore(@RequestBody Store store) throws InvalidRequestException, InvalidSQLException, StoreException{
+	/**
+	 * @RequestBody Store - provide a jSON object which will be stored as
+	 *              'Store' object.
+	 * @return int storeId - if success, returns the storeId of newly created
+	 *         object.
+	 */
+	/***** REST API to create the store. *****/
+	@RequestMapping(value = "/createStore", method = RequestMethod.PUT)
+	public @ResponseBody int createStore(@RequestBody Store store)
+			throws InvalidRequestException, InvalidSQLException, StoreException {
 		logger.info("Inside Create Store Controller");
 		int storeId = 0;
 		try {
@@ -48,24 +70,38 @@ public class StoreController {
 			throw e;
 		} catch (InvalidSQLException e) {
 			throw e;
-		} catch (StoreException e){
+		} catch (StoreException e) {
 			throw e;
 		}
 		return storeId;
 	}
 	
-	@RequestMapping(value="/updateStore", method=RequestMethod.POST)
-	public @ResponseBody void  updateStore(@RequestBody Store store) throws InvalidSQLException{
+	/**
+	 * @RequestBody Store - provide a jSON object which will be udapted as
+	 *              'Store' object.
+	 * @return void
+	 */
+	/***** REST API to update the store details. *****/
+	@RequestMapping(value = "/updateStore", method = RequestMethod.POST)
+	public @ResponseBody void updateStore(@RequestBody Store store)
+			throws InvalidSQLException, StoreNotFoundException {
 		logger.info("Inside Update Store Controller");
 		try {
 			storeService.updateStore(store);
 		} catch (InvalidSQLException e) {
 			throw e;
+		} catch (StoreNotFoundException e) {
+			throw e;
 		}
 	}
 	
+	/**
+	 * @RPathVariable StoreId - provide an integer.
+	 * @return void
+	 */
+	/***** REST API to delete the store. *****/	
 	@RequestMapping(value="/deleteStore/{storeId}", method=RequestMethod.DELETE)
-	public void  deleteStore(@PathVariable("storeId") int storeId) throws InvalidSQLException{
+	public @ResponseBody void  deleteStore(@PathVariable("storeId") int storeId) throws InvalidSQLException{
 		logger.info("Inside Delete Store Controller");
 		try {
 			storeService.deleteStore(storeId);
@@ -74,6 +110,13 @@ public class StoreController {
 		}
 	}
 	
+	/**
+	 * @RequestParam String StoreName - provide a string object of store to be searched.
+	 * @RequestParam int zipcode - provide a valid zipcode to be searched for the given store.
+	 * @RequestParam double miles - provide miles to search store within.
+	 * @return Store store - if success, returns the store details
+	 */
+	/***** REST API to find the store details. *****/
 	@RequestMapping(value = "/findStores", method = RequestMethod.GET)
 	public @ResponseBody List<Store> findStores(
 			@RequestParam("storeName") String storeName,

@@ -6,19 +6,25 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>store-dao</artifactId>
-  <dependencies>
-	<!-- Spring JDBC Support -->
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-jdbc</artifactId>
-		<version>${spring.version}</version>
-	</dependency>
+	<dependencies>
+		<!-- Spring JDBC Support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.codechallange</groupId>
+			<artifactId>store-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-	<!-- MySQL Driver -->
-	<dependency>
-		<groupId>mysql</groupId>
-		<artifactId>mysql-connector-java</artifactId>
-		<version>5.0.5</version>
-	</dependency>
-  </dependencies>
+
+		<!-- MySQL Driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.0.5</version>
+		</dependency>
+	</dependencies>
 </project>

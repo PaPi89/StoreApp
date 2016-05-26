@@ -1,10 +1,10 @@
 package com.store.dao;
 
-/* Store Object to store the data in DB.
- * 
- */
-
-public class Store {
+/**
+ * Reflects the store table from DB.
+ * @author parth_pithadiya
+ *
+ */public class Store {
 
 	private int storeId;
 	private String storeName, storeOwner;

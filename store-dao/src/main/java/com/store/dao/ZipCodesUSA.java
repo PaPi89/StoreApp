@@ -1,5 +1,10 @@
 package com.store.dao;
 
+/**
+ * Reflects the usa_zipcode table from DB.
+ * @author parth_pithadiya
+ *
+ */
 public class ZipCodesUSA {
 
 	private int zipcode;
